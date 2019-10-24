@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    
+</head>
+<body class="home">
+    <div class="container-fluid" id="app">
+        <div class="table-container container border pb-2 my-5">
+            <div class="row bg-dark mb-3">
+                <div class="col  border-bottom d-flex"><h1 class="d-flex align-items-center table-title text-white">Users </h1></div>
+                <div class="col  border-bottom d-flex justify-content-end py-2"><button type="button" data-toggle="modal" data-target="#add-modal" class="btn button--warning"><i class="fa fa-plus"></i></button></div>
+            </div>
+            <table class="table" id="example">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>E-mail</th>
+                        <th>Address</th>
+                        <th>Phone</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in items" v-bind:data-row="item.id">
+                        <td class="col-id">{{ item.id }}</td>
+                        <td class="col-name">{{ item.name }}</td>
+                        <td class="col-username">{{ item.username }}</td>
+                        <td class="col-email">{{ item.email }}</td>
+                        <td class="col-address">{{ item.address.street }}, {{ item.address.suite}}, {{ item.address.city}}, {{ item.address.zipcode}}</td>
+                        <td class="col-phone">{{ item.phone }}</td>
+                        <td> 
+                            <div class="row">
+                                <button class="btn btn-primary btn-sm mr-1" v-on:click="showDetailModal($event)" v-bind:data-id="item.id"><i class="fa fa-pencil-square-o"></i></button>
+                                <button class="btn btn-danger btn-sm " v-on:click="showDeleteModal($event)" v-bind:data-id="item.id"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Add Modal -->
+        <div class="modal add-modal" id="add-modal">
+            <div class="modal-dialog">
+                <div class="modal-content ">
+                    <div class="modal-header d-flex justify-content-center">
+                        <!-- <h1 class="add-icon"><i class="fa fa-user-circle-o"></i></h1> -->
+                        <img src="user-icon.png" alt="" srcset="">
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body px-5">
+                        <div class="overlay d-flex justify-content-center" id="overlayadd">
+                            <h1 class=" d-flex align-items-center">Successfully saved !</h1>
+                        </div>
+                        <div class="add-form">
+                            <div class="form-group">
+                                <label for="inputAddress">Name</label>
+                                <input type="text" class="form-control add-input" id="add-name" placeholder="">
+                                <div class="add-validation add-name">
+                                    The Name field is required
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputAddress2">Username</label>
+                                <input type="text" class="form-control add-input" id="add-username" placeholder="">
+                                <div class="add-validation add-username">
+                                    The Username field is required
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputAddress">Email</label>
+                                <input type="text" class="form-control add-input" id="add-email" placeholder="">
+                                <div class="add-validation add-email">
+                                    The Email field is required
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputAddress">Address</label>
+                                <input type="text" class="form-control add-input" id="add-address" placeholder="">
+                                <!-- <textarea id="add-address" class="form-control add-input" rows="3"></textarea> -->
+                                <div class="add-validation add-address">
+                                    The Address field is required
+                                </div>
+                            </div>  
+                            <div class="form-group">
+                                <label for="inputAddress">Phone</label>
+                                <input type="text" class="form-control add-input" id="add-phone" placeholder="">
+                                <div class="add-validation add-phone">
+                                    The Phone field is required
+                                </div>
+                            </div>                               
+                            <div class="form-group d-flex justify-content-end">
+                                <button class="btn button--info mr-2 " data-dismiss="modal">Cancel</button>
+                                <button id="add-save" class="btn button--warning" disabled>Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Show Modal -->
+        <div class="modal show-modal" id="show-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content ">
+                        <div class="modal-header d-flex justify-content-center">
+                            <div class="d-flex justify-content-center w-100"><img src="user-icon.png" alt="" srcset="" class="inline-block"></div>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="modal-body px-5">
+                            <div class="overlay d-flex justify-content-center" id="overlayshow">
+                                <h1 class=" d-flex align-items-center">Successfully saved !</h1>
+                            </div>
+                            <div class="show-form">
+                                <div class="form-group">
+                                    <label for="inputAddress">Name</label>
+                                    <input type="text" class="form-control show-input" id="show-name" v-bind:value="item.name">
+                                    <div class="show-validation show-name">
+                                        The Name field is required
+                                    </div>
+                                </div>
+    
+                                <div class="form-group">
+                                    <label for="inputAddress2">Username</label>
+                                    <input type="text" class="form-control show-input" id="show-username" placeholder="" v-bind:value="item.username">
+                                    <div class="show-validation show-username">
+                                        The Username field is required
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputAddress">Email</label>
+                                    <input type="text" class="form-control show-input" id="show-email" placeholder="" v-bind:value="item.email">
+                                    <div class="show-validation show-email">
+                                        The Email field is required
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputAddress">Address</label>
+                                    <input type="text" class="form-control show-input" id="show-address" placeholder="" v-bind:value="itemAddres">
+                                    <div class="show-validation show-address">
+                                        The Address field is required
+                                    </div>
+                                </div>                                   
+                                <div class="form-group">
+                                    <label for="inputAddress">Phone</label>
+                                    <input type="text" class="form-control show-input" id="show-phone" placeholder="" v-bind:value="item.phone">
+                                    <div class="show-validation show-phone">
+                                        The Phone field is required
+                                    </div>
+                                </div>     
+                                                      
+                                <div class="form-group d-flex justify-content-end">
+                                    <button class="btn button--info mr-2 " data-dismiss="modal">Cancel</button>
+                                    <button id="show-save" class="btn button--warning " v-on:click="editSave()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>   
+        
+        
+        <!-- Delete Modal -->
+        <div class="modal delete-modal" id="delete-modal">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content ">
+                    <div class="modal-header d-flex justify-content-between">
+                        <div class="d-flex align-items-center w-100">
+                            <div class="d-flex align-items-center">Confirm Deletion</div>
+                        </div>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body px-5">
+                        <div class="overlay d-flex justify-content-center" id="overlaydelete">
+                            <p class=" d-flex align-items-center">Successfully deleted !</p>
+                        </div>
+                        <div class="add-form">
+                            <div class=" d-flex justify-content-center">
+                                <p class=" d-flex align-items-center">Delete this item ?</p>
+                            </div>
+                            <div class="form-group d-flex justify-content-end">
+                                <button class="btn button--info mr-2 btn-sm" data-dismiss="modal">Cancel</button>
+                                <button id="add-delete" class="btn btn-danger btn-sm" v-on:click="deleteData()">Ok</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>         
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
