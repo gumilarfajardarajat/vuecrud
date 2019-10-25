@@ -29,7 +29,7 @@
         <div class="table-container container border pb-2 my-5">
             <div class="row bg-dark mb-3">
                 <div class="col  border-bottom d-flex"><h1 class="d-flex align-items-center table-title text-white">Users </h1></div>
-                <div class="col  border-bottom d-flex justify-content-end py-2"><button type="button" data-toggle="modal" data-target="#add-modal" class="btn button--warning"><i class="fa fa-plus"></i></button></div>
+                <div class="col  border-bottom d-flex justify-content-end py-2"><button type="button" v-on:click="showAddModal()" class="btn button--warning"><i class="fa fa-plus"></i></button></div>
             </div>
             <table class="table" id="example">
                 <thead>
@@ -77,7 +77,7 @@
                         <div class="add-form">
                             <div class="form-group">
                                 <label for="inputAddress">Name</label>
-                                <input type="text" class="form-control add-input" id="add-name" placeholder="">
+                                <input type="text" class="form-control add-input" v-model="form.name" id="add-name" placeholder="">
                                 <div class="add-validation add-name">
                                     The Name field is required
                                 </div>
@@ -85,21 +85,21 @@
 
                             <div class="form-group">
                                 <label for="inputAddress2">Username</label>
-                                <input type="text" class="form-control add-input" id="add-username" placeholder="">
+                                <input type="text" class="form-control add-input" v-model="form.username" id="add-username" placeholder="">
                                 <div class="add-validation add-username">
                                     The Username field is required
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="inputAddress">Email</label>
-                                <input type="text" class="form-control add-input" id="add-email" placeholder="">
+                                <input type="text" class="form-control add-input" v-model="form.email" id="add-email" placeholder="">
                                 <div class="add-validation add-email">
                                     The Email field is required
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="inputAddress">Address</label>
-                                <input type="text" class="form-control add-input" id="add-address" placeholder="">
+                                <input type="text" class="form-control add-input" v-model="form.address" id="add-address" placeholder="">
                                 <!-- <textarea id="add-address" class="form-control add-input" rows="3"></textarea> -->
                                 <div class="add-validation add-address">
                                     The Address field is required
@@ -107,14 +107,14 @@
                             </div>  
                             <div class="form-group">
                                 <label for="inputAddress">Phone</label>
-                                <input type="text" class="form-control add-input" id="add-phone" placeholder="">
+                                <input type="text" class="form-control add-input" v-model="form.phone" id="add-phone" placeholder="">
                                 <div class="add-validation add-phone">
                                     The Phone field is required
                                 </div>
                             </div>                               
                             <div class="form-group d-flex justify-content-end">
                                 <button class="btn button--info mr-2 " data-dismiss="modal">Cancel</button>
-                                <button id="add-save" class="btn button--warning" disabled>Save</button>
+                                <button id="add-save" class="btn button--warning" disabled v-on:click="addData()">Save</button>
                             </div>
                         </div>
                     </div>
@@ -137,7 +137,7 @@
                             <div class="show-form">
                                 <div class="form-group">
                                     <label for="inputAddress">Name</label>
-                                    <input type="text" class="form-control show-input" id="show-name" v-bind:value="item.name">
+                                    <input type="text" class="form-control show-input" id="show-name" v-model="form.name">
                                     <div class="show-validation show-name">
                                         The Name field is required
                                     </div>
@@ -145,28 +145,28 @@
     
                                 <div class="form-group">
                                     <label for="inputAddress2">Username</label>
-                                    <input type="text" class="form-control show-input" id="show-username" placeholder="" v-bind:value="item.username">
+                                    <input type="text" class="form-control show-input" id="show-username" placeholder="" v-model="form.username">
                                     <div class="show-validation show-username">
                                         The Username field is required
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputAddress">Email</label>
-                                    <input type="text" class="form-control show-input" id="show-email" placeholder="" v-bind:value="item.email">
+                                    <input type="text" class="form-control show-input" id="show-email" placeholder="" v-model="form.email">
                                     <div class="show-validation show-email">
                                         The Email field is required
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputAddress">Address</label>
-                                    <input type="text" class="form-control show-input" id="show-address" placeholder="" v-bind:value="itemAddres">
+                                    <input type="text" class="form-control show-input" id="show-address" placeholder="" v-model="form.address">
                                     <div class="show-validation show-address">
                                         The Address field is required
                                     </div>
                                 </div>                                   
                                 <div class="form-group">
                                     <label for="inputAddress">Phone</label>
-                                    <input type="text" class="form-control show-input" id="show-phone" placeholder="" v-bind:value="item.phone">
+                                    <input type="text" class="form-control show-input" id="show-phone" placeholder="" v-model="form.phone">
                                     <div class="show-validation show-phone">
                                         The Phone field is required
                                     </div>
